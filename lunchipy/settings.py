@@ -40,12 +40,14 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "debug_toolbar",
     "user",
     "vote_hub",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -78,22 +80,43 @@ WSGI_APPLICATION = "lunchipy.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+IS_DOCKER = os.getenv("DOCKER_ENV", "false").lower() == "true"
+
+if IS_DOCKER:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB", "default_db_name"),
+            "USER": os.getenv("POSTGRES_USER", "default_user"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD", "default_password"),
+            "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+            "PORT": os.getenv("POSTGRES_PORT", "5432"),
+        }
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_DB", "default_db_name"),
-        "USER": os.getenv("POSTGRES_USER", "default_user"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "default_password"),
-        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
-        "PORT": os.getenv("POSTGRES_PORT", "5432"),
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": os.getenv("POSTGRES_DB", "default_db_name"),
+#         "USER": os.getenv("POSTGRES_USER", "default_user"),
+#         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "default_password"),
+#         "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+#         "PORT": os.getenv("POSTGRES_PORT", "5432"),
+#     }
+# }
 
 
 # Password validation
@@ -151,3 +174,7 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=3),
     "ROTATE_REFRESH_TOKENS": False,
 }
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
