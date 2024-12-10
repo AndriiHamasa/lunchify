@@ -28,8 +28,7 @@ class MenuSerializer(serializers.ModelSerializer):
 
         if Menu.objects.filter(restaurant=restaurant, date=date.today()).exists():
             raise serializers.ValidationError(
-                {
-                    "detail": "A menu for this restaurant on this date already exists."}
+                {"detail": "A menu for this restaurant on this date already exists."}
             )
 
         return attrs
@@ -58,7 +57,7 @@ class VoteSerializer(serializers.ModelSerializer):
         fields = ("id", "employee", "menu", "vote_date")
 
     def validate(self, attrs):
-        user = self.context['request'].user
+        user = self.context["request"].user
         vote_date = date.today()
 
         if Vote.objects.filter(employee=user, vote_date=vote_date).exists():

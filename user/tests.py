@@ -71,9 +71,7 @@ class UserTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.data,
-            {"id": user.id,
-             "email": self.user_data["email"],
-             "is_staff": False},
+            {"id": user.id, "email": self.user_data["email"], "is_staff": False},
         )
 
     def test_register_existing_user(self):
@@ -84,12 +82,6 @@ class UserTests(TestCase):
     def test_update_user_view(self):
         user = User.objects.create_user(**self.user_data)
         self.client.force_authenticate(user)
-        response = self.client.patch(
-            reverse("user:manage"),
-            self.updated_user_data
-        )
+        response = self.client.patch(reverse("user:manage"), self.updated_user_data)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.data["email"],
-            self.updated_user_data["email"]
-        )
+        self.assertEqual(response.data["email"], self.updated_user_data["email"])

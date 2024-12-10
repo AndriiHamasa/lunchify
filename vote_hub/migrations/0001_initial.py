@@ -15,52 +15,125 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Restaurant',
+            name="Restaurant",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('location', models.TextField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("location", models.TextField()),
             ],
             options={
-                'constraints': [models.UniqueConstraint(fields=('name', 'location'), name='unique_restaurant')],
+                "constraints": [
+                    models.UniqueConstraint(
+                        fields=("name", "location"), name="unique_restaurant"
+                    )
+                ],
             },
         ),
         migrations.CreateModel(
-            name='Menu',
+            name="Menu",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(auto_now_add=True)),
-                ('restaurant', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='restaurant', to='vote_hub.restaurant')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateField(auto_now_add=True)),
+                (
+                    "restaurant",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="restaurant",
+                        to="vote_hub.restaurant",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Vote',
+            name="Vote",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('vote_date', models.DateField(auto_now_add=True)),
-                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='employee', to=settings.AUTH_USER_MODEL)),
-                ('menu', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='menu', to='vote_hub.menu')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("vote_date", models.DateField(auto_now_add=True)),
+                (
+                    "employee",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="employee",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "menu",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="menu",
+                        to="vote_hub.menu",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Dish',
+            name="Dish",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('description', models.TextField()),
-                ('price', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('menu', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='dish', to='vote_hub.menu')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("description", models.TextField()),
+                ("price", models.DecimalField(decimal_places=2, max_digits=10)),
+                (
+                    "menu",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="dish",
+                        to="vote_hub.menu",
+                    ),
+                ),
             ],
             options={
-                'constraints': [models.UniqueConstraint(fields=('name', 'description', 'price', 'menu'), name='unique_dish')],
+                "constraints": [
+                    models.UniqueConstraint(
+                        fields=("name", "description", "price", "menu"),
+                        name="unique_dish",
+                    )
+                ],
             },
         ),
         migrations.AddConstraint(
-            model_name='menu',
-            constraint=models.UniqueConstraint(fields=('restaurant', 'date'), name='unique_menu_per_day'),
+            model_name="menu",
+            constraint=models.UniqueConstraint(
+                fields=("restaurant", "date"), name="unique_menu_per_day"
+            ),
         ),
         migrations.AddConstraint(
-            model_name='vote',
-            constraint=models.UniqueConstraint(fields=('employee', 'vote_date'), name='unique_employee_vote_per_day'),
+            model_name="vote",
+            constraint=models.UniqueConstraint(
+                fields=("employee", "vote_date"), name="unique_employee_vote_per_day"
+            ),
         ),
     ]

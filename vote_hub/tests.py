@@ -10,10 +10,7 @@ RESTAURANT_URL = reverse("vote_hub:restaurant-list")
 
 
 def sample_restaurant(**additional) -> Restaurant:
-    defaults = {
-        "name": "Restaurant Sample",
-        "location": "Sample Location"
-    }
+    defaults = {"name": "Restaurant Sample", "location": "Sample Location"}
     defaults.update(additional)
     return Restaurant.objects.create(**defaults)
 
@@ -39,12 +36,10 @@ class UnAuthenticatedRestaurantAPITests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
-
 class AuthenticatedRestaurantAPITests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            email="user@test.com",
-            password="test"
+            email="user@test.com", password="test"
         )
         self.client = APIClient()
         self.client.force_authenticate(self.user)
@@ -70,10 +65,7 @@ class AuthenticatedRestaurantAPITests(TestCase):
 
     def test_create_update_delete_forbidden_restaurants(self):
         # create
-        payload = {
-            "name": "New Restaurant",
-            "location": "New Location"
-        }
+        payload = {"name": "New Restaurant", "location": "New Location"}
 
         res_create = self.client.post(RESTAURANT_URL, payload)
 
@@ -94,13 +86,9 @@ class AuthenticatedRestaurantAPITests(TestCase):
 
 class AdminRestaurantAPITests(TestCase):
     def setUp(self):
-        self.payload = {
-            "name": "New Restaurant",
-            "location": "New Location"
-        }
+        self.payload = {"name": "New Restaurant", "location": "New Location"}
         self.user = get_user_model().objects.create_superuser(
-            email="admin@test.com",
-            password="test"
+            email="admin@test.com", password="test"
         )
         self.client = APIClient()
         self.client.force_authenticate(self.user)

@@ -14,7 +14,9 @@ class Restaurant(models.Model):
 
 
 class Menu(models.Model):
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="restaurant")
+    restaurant = models.ForeignKey(
+        Restaurant, on_delete=models.CASCADE, related_name="restaurant"
+    )
     date = models.DateField(auto_now_add=True)
 
     class Meta:
@@ -34,16 +36,22 @@ class Dish(models.Model):
 
     class Meta:
         constraints = [
-            UniqueConstraint(fields=["name", "description", "price"], name="unique_dish")
+            UniqueConstraint(
+                fields=["name", "description", "price"], name="unique_dish"
+            )
         ]
 
 
 class Vote(models.Model):
-    employee = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="employee")
+    employee = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="employee"
+    )
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name="menu")
     vote_date = models.DateField(auto_now_add=True)
 
     class Meta:
         constraints = [
-            UniqueConstraint(fields=["employee", "vote_date"], name="unique_employee_vote_per_day")
+            UniqueConstraint(
+                fields=["employee", "vote_date"], name="unique_employee_vote_per_day"
+            )
         ]

@@ -13,7 +13,7 @@ from vote_hub.serializers import (
     MenuSerializer,
     VoteSerializer,
     ReadMenuSerializer,
-    DishSerializer
+    DishSerializer,
 )
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
