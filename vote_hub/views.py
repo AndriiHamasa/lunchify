@@ -33,10 +33,14 @@ class MenuViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.action == "current":
-            print("using current serializer")
             return ReadMenuSerializer
         else:
             return MenuSerializer
+
+    def get_queryset(self):
+        if self.action == "current":
+            return Menu.objects.filter(date=date.today()).prefetch_related("dish")
+        return super().get_queryset()
 
     @action(
         methods=["GET"],
@@ -47,7 +51,7 @@ class MenuViewSet(viewsets.ModelViewSet):
     def current(self, request, *args, **kwargs):
         """Endpoint for getting menu of current day"""
 
-        menu_list = Menu.objects.filter(date=date.today())
+        menu_list = self.get_queryset()
 
         serializer = self.get_serializer(menu_list, many=True)
 
