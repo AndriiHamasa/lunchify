@@ -17,6 +17,7 @@ from vote_hub.serializers import (
 )
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
+from drf_spectacular.utils import extend_schema
 
 
 class RestaurantViewSet(viewsets.ModelViewSet):
@@ -42,6 +43,12 @@ class MenuViewSet(viewsets.ModelViewSet):
             return Menu.objects.filter(date=date.today()).prefetch_related("dish")
         return super().get_queryset()
 
+    @extend_schema(
+        summary="Get the menu list for the current day",
+        description="Returns the list of menu for the current day.",
+        responses={200: ReadMenuSerializer(many=True)},
+        parameters=[],
+    )
     @action(
         methods=["GET"],
         detail=False,
@@ -57,6 +64,12 @@ class MenuViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @extend_schema(
+        summary="Get today's winner menu",
+        description="Returns the winner menu for the current day.",
+        responses={200: ReadMenuSerializer(many=True)},
+        parameters=[],
+    )
     @action(
         methods=["GET"],
         detail=False,
